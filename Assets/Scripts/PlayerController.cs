@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -15,24 +16,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string modelChildName = "ty";
 
     [Header("State")]
-    public bool isFalling = false; 
+    public bool isFalling = false;
 
     private CharacterController controller;
     private float turnSmoothVelocity;
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
-    
+
     private int animIDGrounded;
     private int animIDRunning;
     private int animIDIdling;
     private int animIDJumping;
     private int animIDFalling;
 
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        
+
         // TODO: Add is grounded and is falling animations
 
         animIDGrounded = Animator.StringToHash("isGrounded");
@@ -46,7 +48,7 @@ public class PlayerController : MonoBehaviour
     {
         initialPosition = transform.position;
         initialRotation = transform.rotation;
-        initialPosition.y += 50; 
+        initialPosition.y += 50;
 
         if (animator == null)
         {
@@ -82,11 +84,11 @@ public class PlayerController : MonoBehaviour
         {
             float targetAngle = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-            
+
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            
+
             moveDirection.x = moveDir.x * moveSpeed;
             moveDirection.z = moveDir.z * moveSpeed;
         }
@@ -141,12 +143,24 @@ public class PlayerController : MonoBehaviour
     {
         if (transform.position.y < -30)
         {
-            controller.enabled = false; 
-            transform.position = initialPosition;
-            transform.rotation = initialRotation;
-            controller.enabled = true;
-
-            if (animator) animator.SetBool(animIDFalling, true);
+            HandleDeath();
         }
+    }
+
+    public void HandleDeath()
+    {
+        controller.enabled = false;
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
+        controller.enabled = true;
+
+        GameManager.Instance.playerHp--;
+        Debug.Log("Player HP: " + GameManager.Instance.playerHp);
+        if (GameManager.Instance.playerHp <= 0)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        if (animator) animator.SetBool(animIDFalling, true);
     }
 }

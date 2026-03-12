@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: 5d38aed63f05b536288279953b9ce81f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - player: {instanceID: 0}
+  - timerText: {instanceID: 0}
+  - winCanvas: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

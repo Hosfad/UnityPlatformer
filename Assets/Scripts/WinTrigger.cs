@@ -5,13 +5,12 @@ using UnityEngine.UI;
 
 public class WinTrigger : MonoBehaviour
 {
-    public GameObject player;
-    public Text timerText;
+    GameObject player;
     public GameObject winCanvas;
     void Start()
     {
-         winCanvas.SetActive(false);
-         player = FindObjectOfType<PlayerController>().gameObject;
+        winCanvas.SetActive(false);
+        player = FindObjectOfType<PlayerController>().gameObject;
     }
 
     void OnTriggerEnter(Collider other)
